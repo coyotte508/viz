@@ -36,6 +36,15 @@ class BolusTooltip extends PureComponent {
     return formatDecimalNumber(qty, decimalLength);
   }
 
+  formatBG(qty) {
+    let decimalLength = 0;
+    const qtyString = qty.toString();
+    if (qtyString.indexOf('.') !== -1 && qtyString.split('.')[1].length >= 1) {
+      decimalLength = 1;
+    }
+    return formatDecimalNumber(qty, decimalLength);
+  }
+
   isAnimasExtended() {
     const annotations = bolusUtils.getAnnotations(this.props.bolus);
     const isAnimasExtended =
@@ -66,9 +75,9 @@ class BolusTooltip extends PureComponent {
       // medtronic
       let value;
       if (targetLow === targetHigh) {
-        value = `${targetLow}`;
+        value = `${this.formatBG(targetLow)}`;
       } else {
-        value = `${targetLow}-${targetHigh}`;
+        value = `${this.formatBG(targetLow)}-${this.formatBG(targetHigh)}`;
       }
       return (
         <div className={styles.target}>
@@ -83,12 +92,12 @@ class BolusTooltip extends PureComponent {
       return [
         <div className={styles.target} key={'target'}>
           <div className={styles.label}>Target</div>
-          <div className={styles.value}>{`${target}`}</div>
+          <div className={styles.value}>{`${this.formatBG(target)}`}</div>
           <div className={styles.units} />
         </div>,
         <div className={styles.target} key={'range'}>
           <div className={styles.label}>Range</div>
-          <div className={styles.value}>{`${targetRange}`}</div>
+          <div className={styles.value}>{`${this.formatBG(targetRange)}`}</div>
           <div className={styles.units} />
         </div>,
       ];
@@ -98,12 +107,12 @@ class BolusTooltip extends PureComponent {
       return [
         <div className={styles.target} key={'target'}>
           <div className={styles.label}>Target</div>
-          <div className={styles.value}>{`${target}`}</div>
+          <div className={styles.value}>{`${this.formatBG(target)}`}</div>
           <div className={styles.units} />
         </div>,
         <div className={styles.target} key={'high'}>
           <div className={styles.label}>High</div>
-          <div className={styles.value}>{`${targetHigh}`}</div>
+          <div className={styles.value}>{`${this.formatBG(targetHigh)}`}</div>
           <div className={styles.units} />
         </div>,
       ];
@@ -112,7 +121,7 @@ class BolusTooltip extends PureComponent {
     return (
       <div className={styles.target}>
         <div className={styles.label}>Target</div>
-        <div className={styles.value}>{`${target}`}</div>
+        <div className={styles.value}>{`${this.formatBG(target)}`}</div>
         <div className={styles.units} />
       </div>
     );
@@ -213,7 +222,7 @@ class BolusTooltip extends PureComponent {
     const bgLine = !!bg && (
       <div className={styles.bg}>
         <div className={styles.label}>BG</div>
-        <div className={styles.value}>{bg}</div>
+        <div className={styles.value}>{this.formatBG(bg)}</div>
         <div className={styles.units} />
       </div>
     );
@@ -250,7 +259,7 @@ class BolusTooltip extends PureComponent {
       !!bg && (
       <div className={styles.isf}>
         <div className={styles.label}>ISF</div>
-        <div className={styles.value}>{`${isf}`}</div>
+        <div className={styles.value}>{`${this.formatBG(isf)}`}</div>
         <div className={styles.units} />
       </div>
       );
